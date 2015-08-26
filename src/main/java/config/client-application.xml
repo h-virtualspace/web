@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:jaxws="http://cxf.apache.org/jaxws"
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+    <!-- 服务配置 -->
+    <bean id="serviceConfigFileResouce" class="com.here.framework.config.FileResourceFactory">
+    	<property name="filePath">
+			<value>env/config/env.js</value>
+		</property>
+    </bean>
+    <bean id="serviceConfigBean"  class="com.here.framework.config.ConfigFactory">
+ 		<property name="configFile" ref="serviceConfigFileResouce">
+ 			<!-- <value>env/config/env.js</value> -->
+		</property>
+		<property name="name">
+			<value>serviceConfig</value>
+		</property>
+		<property name="className">
+			<value>com.here.framework.service.config.ServiceConfig</value>
+		</property>
+ 	</bean>
+ 	<bean id="serviceConfigBean1"  class="com.here.framework.config.ConfigFactory">
+ 		<property name="configFile">
+			<value>env/config/env1.js</value>
+		</property>
+		<property name="name">
+			<value>sconfig</value>
+		</property>
+		<property name="className">
+			<value>com.here.framework.service.config.ServiceConfig</value>
+		</property>
+ 	</bean>
+    <bean id="restClientProxy" class="com.here.framework.service.client.ServiceProxyImpl">
+    	<!-- 配置服务客户端调用配置 -->
+    	<constructor-arg  ref="serviceConfigBean">
+    	</constructor-arg>
+	</bean>
+	<!-- 加入实例管理 -->
+	<bean class="com.here.framework.bean.InstanceManager.Register">
+		<constructor-arg ref="restClientProxy"></constructor-arg>
+	</bean>
+	<bean class="com.demo.web.BeanTest">
+		<property name="config" ref="serviceConfigBean1">
+		</property>
+	</bean>
+</beans>

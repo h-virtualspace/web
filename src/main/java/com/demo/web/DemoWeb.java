@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import redis.clients.jedis.Jedis;
 
 import com.demo.service.DemoBean;
 import com.demo.service.DemoService;
+import com.demo.service.PersonDemo;
 import com.here.framework.bean.InstanceManager;
 import com.here.framework.core.cache.HObjectSerializable;
 import com.here.framework.core.redis.RedisPool;
@@ -114,15 +117,25 @@ public class DemoWeb extends BaseController{
 		session.invalidate();
 		
 		DemoService domoService=this.getService(DemoService.class);
+//		DemoBean bean = new DemoBean();
+//		bean.setName(Math.random()+"");
+//		bean.setCode(1);
+//		bean.setEmail("www@kkk.com");
+//		bean=domoService.updateDemo(bean);
+//		UserService userService=this.getService(UserService.class);
+//		User user=new User();
+//		user.setNickName("kk");
+//		userService.insert(user);
+//		return bean.toString();
 		DemoBean bean = new DemoBean();
 		bean.setName(Math.random()+"");
 		bean.setCode(1);
 		bean.setEmail("www@kkk.com");
-		bean=domoService.updateDemo(bean);
-		UserService userService=this.getService(UserService.class);
-		User user=new User();
-		user.setNickName("kk");
-		userService.insert(user);
-		return bean.toString();
+		List<PersonDemo> persons = new ArrayList<PersonDemo>();
+		PersonDemo person = new PersonDemo();
+		person.setName("koujp");
+		persons.add(person);
+		domoService.addBean(bean, persons);
+		return "success";
 	}
 }
